@@ -1,0 +1,23 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "idf.espIdfPathWin": "d:\\!Programe\\ESP-IDF\\v5.4.1\\esp-idf",
+    "idf.pythonInstallPath": "d:\\!Programe\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
+    "idf.openOcdConfigs": [
+        "board/esp32-wrover-kit-3.3v.cfg"
+    ],
+    "idf.portWin": "COM5",
+    "idf.toolsPathWin": "d:\\!Programe\\.espressif",
+    "idf.flashType": "UART",
+    "files.associations": {
+        "freertos.h": "c",
+        "task.h": "c",
+        "esp_wifi.h": "c",
+        "esp_log.h": "c",
+        "stdio.h": "c",
+        "esp_http_client.h": "c",
+        "esp_event.h": "c",
+        "string.h": "c",
+        "gpio.h": "c",
+        "dht11.h": "c"
+    }
+}
