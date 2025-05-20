@@ -84,6 +84,8 @@ void app_main(void)
 
     /* Payload to send via HTTP */
     char payload[WIFI_MAX_PAYLOAD_LEN];
+    char temp_humi[WIFI_MAX_PAYLOAD_LEN];
+    char acc[WIFI_MAX_PAYLOAD_LEN];
 
     /* HTTP status code response */
     int status_code;
@@ -128,7 +130,7 @@ void app_main(void)
     /* Initialize SSD1306 display */
     ssd1306_init(&ssd);
     ssd1306_clear();
-    ssd1306_draw_string(20, 5, "Initializing...", true);
+    ssd1306_draw_string(10, 5, "INITIALIZING...", true);
     ssd1306_refresh();
 
     /* Initialize wifi */
@@ -153,16 +155,26 @@ void app_main(void)
         /* Read DHT11 temperature & humidity data */
         dht11_read(&dht11_sensor, CONFIG_CONNECTION_TIMEOUT);
         SHOW_INF(TAG, "TEMP: %.2f, HUMI: %.2f", dht11_sensor.temperature, dht11_sensor.humidity);
+        sprintf(temp_humi, "T: %.2fC, H: %.2f%%", dht11_sensor.temperature, dht11_sensor.humidity);
 
         /* Read GY291 accelerometer data */
         gy291_read_xyz(&x, &y, &z, &gx, &gy, &gz);
         SHOW_INF(TAG, "X: %.2f, Y: %.2f, Z: %.2f", gx, gy, gz);
-
-        /* Init ESP as a http client */
-        client = esp_http_client_init(&config);
+        sprintf(acc, "G: %.2f, %.2f, %.2f", gx, gy, gz);
 
         /* Concatenate sensors data */
         sprintf(payload, "T=%.2f,H=%.2f,X=%.2f,Y=%.2f,Z=%.2f", dht11_sensor.temperature, dht11_sensor.humidity, gx, gy, gz);
+
+        /* Print data on display */
+        ssd1306_clear();
+        /* TODO: Add battery level and WiFi connection */
+        ssd1306_draw_string(0, 5, "BATT: 100%, DIGI", true);
+        ssd1306_draw_string(0, 25, temp_humi, true);
+        ssd1306_draw_string(0, 35, acc, true);
+        ssd1306_refresh();
+
+        /* Init ESP as a http client */
+        client = esp_http_client_init(&config);
 
         /* Set client header */
         esp_http_client_set_header(client, "Content-Type", "application/json");

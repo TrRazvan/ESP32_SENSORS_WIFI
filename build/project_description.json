@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "ESP32_WiFi",
-    "project_version":    "9c026b9",
+    "project_version":    "858da67-dirty",
     "project_path":       "D:/Projects/ESP32_MAIN",
     "idf_path":           "D:/!Programe/ESP-IDF/v5.4.1/esp-idf",
     "build_dir":          "D:/Projects/ESP32_MAIN/build",
