@@ -2,6 +2,7 @@
 #define AP_WIFI_H
 
 #include "esp_err.h"
+#include "esp_wifi.h"
 
 /* ESP will send data to this URL after STA connection */
 #define SERVER_URL "http://cazangiilor.go.ro:57348/data"
@@ -22,11 +23,9 @@ esp_err_t wifi_init();
 /**
  * @brief Connect ESP to STA or AP.
  * 
- * @return:
- *  - ESP_OK if OK
- *  - error code if not OK
+ * @returns STA_MODE if connected as STA, AP_MODE if started as AP
  */
-esp_err_t wifi_connect();
+wifi_mode_t wifi_connect();
 
 /* END AP_WIFI_H */
 #endif

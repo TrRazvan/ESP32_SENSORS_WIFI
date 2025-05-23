@@ -2,7 +2,6 @@
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "esp_wifi.h"
 #include "esp_event.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
@@ -462,24 +461,24 @@ esp_err_t wifi_init()
 /**
  * @brief Connect ESP to STA or AP.
  * 
- * @return:
- *  - ESP_OK if OK
- *  - error code if not OK
+ * @returns STA_MODE if connected as STA, AP_MODE if started as AP
  */
-esp_err_t wifi_connect()
+wifi_mode_t wifi_connect()
 {
-    esp_err_t ret = ESP_OK;
+    wifi_mode_t ret = WIFI_MODE_AP;
 
     /* Check if is any saved WiFi in NVS flash */
     if (!connect_to_saved_wifi())
     {   
         /* Start AP mode if there are no saved WiFi info */
-        ret = start_ap_mode();
+        start_ap_mode();
+        ret = WIFI_MODE_AP;
     }
     else
     {
         /* Start STA server if there are saved WiFi info */
-        ret = start_server();
+        start_server();
+        ret = WIFI_MODE_STA;
     }
 
     return ret;

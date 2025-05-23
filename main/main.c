@@ -49,6 +49,7 @@ void app_main(void)
     
     /* HTTP status code response */
     int status_code;
+    wifi_mode_t wifi_conn_mode = WIFI_MODE_AP;
     /* Payload to send via HTTP */
     char payload[WIFI_MAX_PAYLOAD_LEN];
     char acc[WIFI_MAX_PAYLOAD_LEN];
@@ -109,7 +110,7 @@ void app_main(void)
     ret = wifi_init();
     if (ret == ESP_OK)
     {
-        wifi_connect();
+        wifi_conn_mode = wifi_connect();
     }
 
      /* Config I2C controller */
@@ -173,8 +174,14 @@ void app_main(void)
 
         /* Print data on display */
         ssd1306_clear();
-        /* TODO: Add battery level and WiFi connection */
-        ssd1306_draw_string(0, 5, "DIGI", true);
+        if (wifi_conn_mode == WIFI_MODE_AP)
+        {
+            ssd1306_draw_string(0, 5, "WIFI AP MODE", true);
+        }
+        else if (wifi_conn_mode == WIFI_MODE_STA)
+        {
+            ssd1306_draw_string(0, 5, "WIFI STA MODE", true);
+        }
         ssd1306_draw_string(0, 25, temp_humi, true);
         ssd1306_draw_string(0, 35, acc, true);
         ssd1306_draw_string(0, 45, temp_humi_dht, true);

@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "ESP32_MAIN",
-    "project_version":    "d6dd7ec-dirty",
+    "project_version":    "8c6a5ea-dirty",
     "project_path":       "D:/Projects/ESP32_MAIN",
     "idf_path":           "D:/!Programe/ESP-IDF/v5.4.1/esp-idf",
     "build_dir":          "D:/Projects/ESP32_MAIN/build",
