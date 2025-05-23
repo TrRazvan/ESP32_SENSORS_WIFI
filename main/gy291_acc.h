@@ -3,18 +3,13 @@
 
 #include "driver/i2c.h"
 
-typedef struct {
-    i2c_config_t conf;
-    i2c_port_t i2c_num;
-} gy291_acc_t;
-
 /**
  * @brief Initialize I2C and GY291 Accelerometer senzor.
  *
- * @param[in] conf  Pointer to the configuration structure.
+ * @param[in] i2c_num I2C num.
  * @returns ESP_OK in success, error code otherwise
  */
-esp_err_t gy291_acc_init(gy291_acc_t *conf);
+esp_err_t gy291_acc_init(i2c_port_t i2c_num);
 
 /**
  * @brief Calibrate GY291 Accelerometer senzor.

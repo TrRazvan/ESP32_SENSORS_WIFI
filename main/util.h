@@ -30,6 +30,12 @@
 /* Byte length in bits */
 #define BYTE_LEN    (8u)
 
+/* Shift 1 bit */
+#define SHIFT_1_BIT  (1u)
+
+/* Null parameter */
+#define NULL_PARAMETER  (-1)
+
 /**
  * @brief Contains indexes
  */

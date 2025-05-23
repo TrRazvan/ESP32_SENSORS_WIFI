@@ -42,8 +42,7 @@
 /* Tag for terminal */
 #define TAG "GY291"
 
-/* Local config variable */
-static gy291_acc_t *global_conf = NULL;
+static i2c_port_t global_i2c_num = INIT_USGN_VAL;
 
 /* Global variables for calibration offset */
 int16_t offset_x = INIT_SGN_VAL;
@@ -67,7 +66,7 @@ static esp_err_t gy291_write(const uint8_t reg, const uint8_t data)
     esp_err_t ret = ESP_OK;
 
     /* Write GY291 register via I2C */
-    ret = i2c_master_write_to_device(global_conf->i2c_num, GY291_ADDR, (uint8_t[]){reg, data}, WRITE_REG_DATA_SIZE, pdMS_TO_TICKS(TIMEOUT_100_MS));
+    ret = i2c_master_write_to_device(global_i2c_num, GY291_ADDR, (uint8_t[]){reg, data}, WRITE_REG_DATA_SIZE, pdMS_TO_TICKS(TIMEOUT_100_MS));
     if (ret != ESP_OK)
     {
         SHOW_ERR(TAG, "GY291 register writting error");
@@ -96,7 +95,7 @@ static esp_err_t gy291_read(const uint8_t reg, uint8_t *buf, const size_t len)
     }
     else
     {   /* Read 1 byte from GY291 register */
-        ret = i2c_master_write_read_device(global_conf->i2c_num, GY291_ADDR, &reg, READ_REG_DATA_SIZE, buf, len, pdMS_TO_TICKS(TIMEOUT_100_MS));
+        ret = i2c_master_write_read_device(global_i2c_num, GY291_ADDR, &reg, READ_REG_DATA_SIZE, buf, len, pdMS_TO_TICKS(TIMEOUT_100_MS));
         if (ret != ESP_OK)
         {
             SHOW_ERR(TAG, "GY291 read register error");
@@ -138,56 +137,29 @@ static int16_t apply_filter(int32_t *buffer, const int16_t value)
 /**
  * @brief Initialize I2C and GY291 Accelerometer senzor.
  *
- * @param[in] conf  Pointer to the configuration structure.
+ * @param[in] i2c_num I2C num.
  * @returns ESP_OK in success, error code otherwise
  */
-esp_err_t gy291_acc_init(gy291_acc_t *conf)
+esp_err_t gy291_acc_init(i2c_port_t i2c_num)
 {
     esp_err_t ret = ESP_OK;
+    
+    global_i2c_num = i2c_num;
 
-    /* Check if config arg is null */
-    if (conf == NULL)
+    /* Activate senzor */
+    ret = gy291_write(GY291_REG_POWER_CTL, 0x08);
+    if (ret == ESP_OK)
     {
-        SHOW_ERR(TAG, "GY291 init error");
+        /* Set ±4g interval */
+        ret = gy291_write(GY291_REG_DATA_FORMAT, 0x01);
+        if (ret != ESP_OK)
+        {
+            SHOW_ERR(TAG, "GY291 set interval error");
+        }                    
     }
     else
     {
-        /* Config I2C controller */
-        ret = i2c_param_config(conf->i2c_num, &conf->conf);
-        if (ret == ESP_OK)
-        {
-            /* Install I2C driver */
-            ret = i2c_driver_install(conf->i2c_num, conf->conf.mode, I2C_RX_BUFF_SIZE, I2C_TX_BUFF_SIZE, I2C_INTR_FLAGS);
-            if (ret == ESP_OK)
-            {
-                /* Copy config data to local variable */
-                global_conf = conf;
-
-                /* Activate senzor */
-                ret = gy291_write(GY291_REG_POWER_CTL, 0x08);
-                if (ret == ESP_OK)
-                {
-                    /* Set ±4g interval */
-                    ret = gy291_write(GY291_REG_DATA_FORMAT, 0x01);
-                    if (ret != ESP_OK)
-                    {
-                        SHOW_ERR(TAG, "GY291 set interval error");
-                    }                    
-                }
-                else
-                {
-                    SHOW_ERR(TAG, "GY291 activate error");
-                }
-            }
-            else
-            {
-                SHOW_ERR(TAG, "GY291 I2C driver install error");
-            }
-        }
-        else
-        {
-            SHOW_ERR(TAG, "GY291 I2C config controller error");
-        }
+        SHOW_ERR(TAG, "GY291 activate error");
     }
 
     return ret;

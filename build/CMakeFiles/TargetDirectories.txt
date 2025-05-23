@@ -10,7 +10,7 @@ D:/Projects/ESP32_MAIN/build/CMakeFiles/monitor.dir
 D:/Projects/ESP32_MAIN/build/CMakeFiles/flash.dir
 D:/Projects/ESP32_MAIN/build/CMakeFiles/encrypted-flash.dir
 D:/Projects/ESP32_MAIN/build/CMakeFiles/_project_elf_src.dir
-D:/Projects/ESP32_MAIN/build/CMakeFiles/ESP32_WiFi.elf.dir
+D:/Projects/ESP32_MAIN/build/CMakeFiles/ESP32_MAIN.elf.dir
 D:/Projects/ESP32_MAIN/build/CMakeFiles/size.dir
 D:/Projects/ESP32_MAIN/build/CMakeFiles/size-files.dir
 D:/Projects/ESP32_MAIN/build/CMakeFiles/size-components.dir
